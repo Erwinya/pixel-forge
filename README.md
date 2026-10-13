@@ -10,7 +10,17 @@ No external image libraries.
 
 ## Status
 
-Project scaffolding is in place. Image IO, filters, CLI, and build scripts will land in follow-up commits.
+Public image API (`include/image.hpp`) is in place. PPM IO, filters, CLI, and build scripts will land in follow-up commits.
+
+## Library
+
+```cpp
+#include "image.hpp"
+
+auto img = pixelforge::load_ppm("samples/checker.ppm");
+auto gray = pixelforge::to_grayscale(img);
+pixelforge::save_ppm("build/gray.ppm", gray);
+```
 
 ## Planned usage
 
