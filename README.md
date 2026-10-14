@@ -10,9 +10,9 @@ No external image libraries.
 
 ## Status
 
-Public image API (`include/image.hpp`) is in place. PPM IO, filters, CLI, and build scripts will land in follow-up commits.
+Public header, PPM load/save, grayscale, and a sample checker image are in place. Blur, Sobel edges, CLI, and build scripts will land in follow-up commits.
 
-## Library
+## Library (so far)
 
 ```cpp
 #include "image.hpp"
@@ -20,13 +20,6 @@ Public image API (`include/image.hpp`) is in place. PPM IO, filters, CLI, and bu
 auto img = pixelforge::load_ppm("samples/checker.ppm");
 auto gray = pixelforge::to_grayscale(img);
 pixelforge::save_ppm("build/gray.ppm", gray);
-```
-
-## Planned usage
-
-```powershell
-.\build.bat
-.\build\pixel-forge.exe --op gray --in samples\checker.ppm --out build\gray.ppm
 ```
 
 ## Requirements
