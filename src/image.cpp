@@ -1,7 +1,9 @@
 #include "image.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <fstream>
+#include <sstream>
 #include <stdexcept>
 
 namespace pixelforge {
@@ -38,7 +40,7 @@ Image load_ppm(const std::string &path) {
     skip_comments(in);
     in >> maxv;
     if (w <= 0 || h <= 0 || maxv <= 0) throw std::runtime_error("invalid PPM header");
-    if (magic == "P6") in.get();
+    if (magic == "P6") in.get();  // consume single whitespace
 
     Image img;
     img.width = w;
@@ -86,12 +88,56 @@ Image to_grayscale(const Image &img) {
     return out;
 }
 
-Image box_blur(const Image & /*img*/, int /*radius*/) {
-    throw std::runtime_error("box_blur() not implemented yet");
+Image box_blur(const Image &img, int radius) {
+    if (radius < 1) return img;
+    Image out = img;
+    for (int y = 0; y < img.height; ++y) {
+        for (int x = 0; x < img.width; ++x) {
+            int sum[3] = {0, 0, 0};
+            int count = 0;
+            for (int dy = -radius; dy <= radius; ++dy) {
+                for (int dx = -radius; dx <= radius; ++dx) {
+                    int xx = x + dx;
+                    int yy = y + dy;
+                    if (xx < 0 || yy < 0 || xx >= img.width || yy >= img.height) continue;
+                    int i = idx(img, xx, yy, 0);
+                    sum[0] += img.rgb[i];
+                    sum[1] += img.rgb[i + 1];
+                    sum[2] += img.rgb[i + 2];
+                    ++count;
+                }
+            }
+            int o = idx(out, x, y, 0);
+            out.rgb[o] = static_cast<uint8_t>(sum[0] / count);
+            out.rgb[o + 1] = static_cast<uint8_t>(sum[1] / count);
+            out.rgb[o + 2] = static_cast<uint8_t>(sum[2] / count);
+        }
+    }
+    return out;
 }
 
-Image sobel_edges(const Image & /*img*/) {
-    throw std::runtime_error("sobel_edges() not implemented yet");
+Image sobel_edges(const Image &img) {
+    Image gray = to_grayscale(img);
+    Image out = gray;
+    const int kx[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
+    const int ky[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
+
+    for (int y = 1; y < img.height - 1; ++y) {
+        for (int x = 1; x < img.width - 1; ++x) {
+            int gx = 0, gy = 0;
+            for (int j = -1; j <= 1; ++j) {
+                for (int i = -1; i <= 1; ++i) {
+                    int v = gray.rgb[idx(gray, x + i, y + j, 0)];
+                    gx += kx[j + 1][i + 1] * v;
+                    gy += ky[j + 1][i + 1] * v;
+                }
+            }
+            int mag = static_cast<int>(std::min(255.0, std::sqrt(gx * gx + gy * gy)));
+            int o = idx(out, x, y, 0);
+            out.rgb[o] = out.rgb[o + 1] = out.rgb[o + 2] = static_cast<uint8_t>(mag);
+        }
+    }
+    return out;
 }
 
 }  // namespace pixelforge

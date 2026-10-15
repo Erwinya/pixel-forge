@@ -16,8 +16,6 @@ Image load_ppm(const std::string &path);
 void save_ppm(const std::string &path, const Image &img);
 
 Image to_grayscale(const Image &img);
-
-/// Box blur and Sobel edges land in a follow-up commit.
 Image box_blur(const Image &img, int radius);
 Image sobel_edges(const Image &img);
 

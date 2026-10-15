@@ -10,16 +10,16 @@ No external image libraries.
 
 ## Status
 
-Public header, PPM load/save, grayscale, and a sample checker image are in place. Blur, Sobel edges, CLI, and build scripts will land in follow-up commits.
+Library filters are complete (PPM IO, grayscale, box blur, Sobel). CLI and build scripts will land in follow-up commits.
 
-## Library (so far)
+## Library
 
 ```cpp
 #include "image.hpp"
 
 auto img = pixelforge::load_ppm("samples/checker.ppm");
-auto gray = pixelforge::to_grayscale(img);
-pixelforge::save_ppm("build/gray.ppm", gray);
+auto edges = pixelforge::sobel_edges(img);
+pixelforge::save_ppm("build/edges.ppm", edges);
 ```
 
 ## Requirements
