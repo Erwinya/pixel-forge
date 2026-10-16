@@ -10,7 +10,14 @@ No external image libraries.
 
 ## Status
 
-Library filters are complete (PPM IO, grayscale, box blur, Sobel). CLI and build scripts will land in follow-up commits.
+Library and CLI entrypoint are in place. Makefile / `build.bat` will land in a follow-up commit.
+
+## Build (manual)
+
+```powershell
+g++ -std=c++17 -I include -o pixel-forge.exe src\image.cpp src\main.cpp
+.\pixel-forge.exe --op gray --in samples\checker.ppm --out build\gray.ppm
+```
 
 ## Library
 
