@@ -10,13 +10,20 @@ No external image libraries.
 
 ## Status
 
-Library and CLI entrypoint are in place. Makefile / `build.bat` will land in a follow-up commit.
+Complete: library, CLI, and build scripts (`Makefile`, `build.bat`).
 
-## Build (manual)
+## Build
 
-```powershell
-g++ -std=c++17 -I include -o pixel-forge.exe src\image.cpp src\main.cpp
-.\pixel-forge.exe --op gray --in samples\checker.ppm --out build\gray.ppm
+```bash
+make
+./pixel-forge --op gray --in samples/checker.ppm --out gray.ppm
+```
+
+Windows (MinGW / LLVM):
+
+```bat
+build.bat
+build\pixel-forge.exe --op gray --in samples\checker.ppm --out build\gray.ppm
 ```
 
 ## Library
