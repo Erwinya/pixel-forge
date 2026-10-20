@@ -26,6 +26,16 @@ build.bat
 build\pixel-forge.exe --op gray --in samples\checker.ppm --out build\gray.ppm
 ```
 
+
+## CLI options
+
+| Flag | Default | Meaning |
+|------|---------|---------|
+| `--op` | required | `gray`, `blur`, or `edges` |
+| `--in` | required | Input PPM path |
+| `--out` | required | Output PPM path |
+| `--radius` | `1` | Box-blur radius (blur only) |
+
 ## Library
 
 ```cpp
