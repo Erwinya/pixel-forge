@@ -12,5 +12,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build
         run: make
+      - name: Unit tests
+        run: make test
       - name: Smoke
-        run: ./pixel-forge --op gray --in samples/checker.ppm --out /tmp/gray.ppm
+        run: |
+          ./pixel-forge --op threshold --threshold 128 --in samples/checker.ppm --out /tmp/threshold.ppm
+          test -f /tmp/threshold.ppm
